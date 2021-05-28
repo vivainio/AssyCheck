@@ -17,6 +17,7 @@ namespace AssyCheck
                     if (failures == null) failures = new List<string>();
                     failures.Add(assembly);
                 }
+                try { CheckPipe(); } catch { AddFailure("System.IO.Pipelines"); }
                 try { CheckBuffers(); } catch { AddFailure("System.Buffers"); }
                 try { CheckUnsafe(); } catch { AddFailure("System.Runtime.CompilerServices.Unsafe"); }
                 try { CheckNumerics(); } catch { AddFailure("System.Numerics.Vectors"); }
@@ -34,6 +35,9 @@ namespace AssyCheck
                 throw new InvalidOperationException(err);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static void CheckPipe() => GC.KeepAlive(System.IO.Pipelines.PipeOptions.Default);
+        
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void CheckBuffers()
         {
