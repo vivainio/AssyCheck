@@ -6,7 +6,7 @@ Original idea & implementation courtesy of [Marc Gravell](https://github.com/mgr
 
 ## Problem statement
 
-Dotnet framework 4.7.2 applications can sometimes fail with binding redirects to System.Buffers, System.Memory, System.Runtime.CompilerServices.Unsafe (full list TBD). 
+Dotnet framework 4.7.2 applications can sometimes fail with binding redirects to System.Buffers, System.Memory, System.Runtime.CompilerServices.Unsafe, System.IO.Pipelines etc. 
 
 Exception looks like this:
 
