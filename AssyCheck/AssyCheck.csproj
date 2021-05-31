@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
+    <Title>AssyCheck</Title>
+    <Description>Library to ensure .NET binding redirects work</Description>
+    <Authors>vivainio</Authors>
+    <Company />
+    <Copyright>Ville Vainio</Copyright>
+    <PackageProjectUrl>https://github.com/vivainio/AssyCheck</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/vivainio/AssyCheck/blob/master/LICENSE</PackageLicenseUrl>
+    
+    
   </PropertyGroup>
 
   <PropertyGroup>
