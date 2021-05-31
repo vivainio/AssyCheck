@@ -1,1 +1,1 @@
-dotnet pack -c release -p:Version=1.7.2
+dotnet pack -c release -p:Version=5.0.0

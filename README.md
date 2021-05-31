@@ -18,7 +18,6 @@ File name: 'System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7
 These are caused by assemblies that are part of netstandard 2.0, and are built in to .NET Core, but are installed to net472 applications with nuget. AssyCheck fixes 
 this problem and helps detect it early.
 
-
 ## Usage
 
 Install dependency:
@@ -39,3 +38,25 @@ static void Main(string[] args)
 
 Note that just adding a dependency to AssyCheck to your "main" application usually fixes your problem, but the assertion can be done to detect any problem earlier anyway.
 
+
+## Caveat
+
+This package currently includes StackExchange.Redis in addition to .NET assemblies (because StackExchange.Redis is a common cause for these issues). 
+If this is a big problem for you, file a ticket.
+
+## Dependency history
+
+### Version 5.0.0
+
+```xml
+  <ItemGroup>
+    <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
+    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <PackageReference Include="System.IO.Pipelines" Version="5.0.1" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="5.0.0" />
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+```
