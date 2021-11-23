@@ -21,6 +21,8 @@ namespace AssyCheck
                 try { CheckBuffers(); } catch { AddFailure("System.Buffers"); }
                 try { CheckUnsafe(); } catch { AddFailure("System.Runtime.CompilerServices.Unsafe"); }
                 try { CheckNumerics(); } catch { AddFailure("System.Numerics.Vectors"); }
+                try { CheckChannels(); } catch { AddFailure("System.Threading.Channels"); }
+                try { CheckRedis(); } catch { AddFailure("StackExchange.Redis"); }
 
                 if (failures == null || failures.Count == 0) return "";
 
@@ -52,6 +54,12 @@ namespace AssyCheck
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void CheckNumerics() => _ = System.Numerics.Vector.IsHardwareAccelerated;
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static void CheckChannels() => _ = default(System.Threading.Channels.ChannelOptions);
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static void CheckRedis() => _ = default(StackExchange.Redis.Bitwise);
+
 
     }
 }
