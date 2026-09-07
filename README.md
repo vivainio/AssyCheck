@@ -45,7 +45,7 @@ If this is a big problem for you, file a ticket.
 
 ## Dependency history
 
-### Version 9.0.0
+### Version 10.0.0
 
 ```xml
   <ItemGroup>
