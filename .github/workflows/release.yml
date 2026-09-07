@@ -52,13 +52,13 @@ jobs:
         run: dotnet restore AssyCheck.Test/AssyCheck.Test.csproj
 
       - name: Build
-        run: dotnet build AssyCheck.Test/AssyCheck.Test.csproj --configuration Release --no-restore
+        run: dotnet build AssyCheck.Test/AssyCheck.Test.csproj --configuration Release --no-restore -p:Version=${{ env.PACKAGE_VERSION }}
 
       - name: Run dependency smoke test
         run: .\AssyCheck.Test\bin\Release\net472\AssyCheck.Test.exe
 
       - name: Create NuGet package
-        run: dotnet pack AssyCheck/AssyCheck.csproj --configuration Release --no-restore --output artifacts -p:Version=${{ env.PACKAGE_VERSION }}
+        run: dotnet pack AssyCheck/AssyCheck.csproj --configuration Release --no-build --output artifacts -p:Version=${{ env.PACKAGE_VERSION }}
 
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
