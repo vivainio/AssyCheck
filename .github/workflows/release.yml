@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      package_version:
+        description: Version for the dry-run package
+        required: true
+        default: 10.0.0-test.1
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-and-package:
+    runs-on: windows-latest
+    outputs:
+      package-version: ${{ steps.version.outputs.package-version }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Read version from release tag
+        id: version
+        shell: pwsh
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          MANUAL_VERSION: ${{ inputs.package_version }}
+        run: |
+          $rawVersion = if ($env:EVENT_NAME -eq 'release') {
+            $env:RELEASE_TAG
+          } else {
+            $env:MANUAL_VERSION
+          }
+          $version = $rawVersion -replace '^v', ''
+          if ($version -notmatch '^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$') {
+            throw "Version must be a NuGet version, optionally prefixed with v. Got: $version"
+          }
+          "PACKAGE_VERSION=$version" >> $env:GITHUB_ENV
+          "package-version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Restore dependencies
+        run: dotnet restore AssyCheck.Test/AssyCheck.Test.csproj
+
+      - name: Build
+        run: dotnet build AssyCheck.Test/AssyCheck.Test.csproj --configuration Release --no-restore
+
+      - name: Run dependency smoke test
+        run: .\AssyCheck.Test\bin\Release\net472\AssyCheck.Test.exe
+
+      - name: Create NuGet package
+        run: dotnet pack AssyCheck/AssyCheck.csproj --configuration Release --no-restore --output artifacts -p:Version=${{ env.PACKAGE_VERSION }}
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AssyCheck-${{ env.PACKAGE_VERSION }}
+          path: artifacts/*.nupkg
+          if-no-files-found: error
+
+  attach-to-release:
+    if: github.event_name == 'release'
+    needs: build-test-and-package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download package
+        uses: actions/download-artifact@v4
+        with:
+          name: AssyCheck-${{ needs.build-test-and-package.outputs.package-version }}
+          path: artifacts
+
+      - name: Attach package to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload '${{ github.event.release.tag_name }}' artifacts/*.nupkg --clobber --repo '${{ github.repository }}'
