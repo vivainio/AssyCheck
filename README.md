@@ -6,7 +6,7 @@ Original idea & implementation courtesy of [Marc Gravell](https://github.com/mgr
 
 ## Problem statement
 
-Dotnet framework 4.7.2 applications can sometimes fail with binding redirects to System.Buffers, System.Memory, System.Runtime.CompilerServices.Unsafe, System.IO.Pipelines etc. 
+Dotnet framework 4.7.2 applications can sometimes fail with binding redirects to System.Buffers, System.Memory, System.Runtime.CompilerServices.Unsafe, System.IO.Pipelines etc.
 
 Exception looks like this:
 
@@ -15,7 +15,7 @@ System.IO.FileNotFoundException: Could not load file or assembly 'System.Buffers
 File name: 'System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'
 ```
 
-These are caused by assemblies that are part of netstandard 2.0, and are built in to .NET Core, but are installed to net472 applications with nuget. AssyCheck fixes 
+These are caused by assemblies that are part of netstandard 2.0, and are built in to .NET Core, but are installed to net472 applications with nuget. AssyCheck fixes
 this problem and helps detect it early.
 
 ## Usage
@@ -38,13 +38,29 @@ static void Main(string[] args)
 
 Note that just adding a dependency to AssyCheck to your "main" application usually fixes your problem, but the assertion can be done to detect any problem earlier anyway.
 
-
 ## Caveat
 
-This package currently includes StackExchange.Redis in addition to .NET assemblies (because StackExchange.Redis is a common cause for these issues). 
+This package currently includes StackExchange.Redis in addition to .NET assemblies (because StackExchange.Redis is a common cause for these issues).
 If this is a big problem for you, file a ticket.
 
 ## Dependency history
+
+### Version 10.0.0
+
+```xml
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.5" />
+    <PackageReference Include="StackExchange.Redis" Version="2.5.61" />
+    <PackageReference Include="System.Buffers" Version="4.6.1" />
+    <PackageReference Include="System.IO.Pipelines" Version="10.0.5" />
+    <PackageReference Include="System.Memory" Version="4.6.3" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
+    <PackageReference Include="System.Text.Json" Version="10.0.5" />
+    <PackageReference Include="System.Threading.Channels" Version="10.0.5" />
+    <PackageReference Include="System.ValueTuple" Version="4.6.1" />
+  </ItemGroup>
+```
 
 ### Version 5.0.0
 
