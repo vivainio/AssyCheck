@@ -45,6 +45,29 @@ If this is a big problem for you, file a ticket.
 
 ## Dependency history
 
+### Version 10.1.0
+
+```xml
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.5" />
+    <PackageReference Include="StackExchange.Redis" Version="2.5.61" />
+    <PackageReference Include="System.Buffers" Version="4.6.1" />
+    <PackageReference Include="System.IO.Pipelines" Version="10.0.5" />
+    <PackageReference Include="System.Memory" Version="4.6.3" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
+    <PackageReference Include="System.Text.Json" Version="10.0.5" />
+    <PackageReference Include="System.Threading.Channels" Version="10.0.5" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
+    <PackageReference Include="System.ValueTuple" Version="4.6.1" />
+  </ItemGroup>
+```
+
+Adds `System.Threading.Tasks.Extensions` — another BCL shim assembly whose
+package version doesn't map 1:1 to its assembly version, making it easy for
+a binding redirect to end up stale or wrong when the package is only pulled
+in transitively rather than pinned explicitly.
+
 ### Version 10.0.0
 
 ```xml
